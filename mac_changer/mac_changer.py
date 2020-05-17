@@ -28,17 +28,17 @@ def change_mac(interface, new_mac):
 	subprocess.call(["ifconfig", interface, "up"])	
 
 
-options = get_arguments()
-#change_mac(options.interface, options.new_mac)	
+def get_reg_mac(interface):
+	ifconfig_result = subprocess.check_output(["ifconfig", interface])
+
+	mac_query = re.search(r"\w\w:\w\w:\w\w:\w\w:\w\w:\w\w", ifconfig_result)
+
+	if mac_query:
+		return mac_query.group(0)
+	else:
+		print("[-] Could not read Mac-Address!")
 
 
-#print("[+] Changed Mac-Adress successfully to " + options.new_mac + "!")
+curr_mac = get_reg_mac(get_arguments().interface)
 
-ifconfig_result = subprocess.check_output(["ifconfig", options.interface])
-
-#print(ifconfig_result)
-
-mac_query = re.search(r"\w\w:\w\w:\w\w:\w\w:\w\w:\w\w", ifconfig_result)
-
-if mac_query:
-	print("Successfully changed Mac-Address to: " + mac_query.group(0))
+print("Current Mac-Address: " + str(curr_mac))
