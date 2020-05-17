@@ -2,6 +2,7 @@
 
 import subprocess
 import optparse
+import re
 
 
 def get_arguments():
@@ -35,4 +36,9 @@ options = get_arguments()
 
 ifconfig_result = subprocess.check_output(["ifconfig", options.interface])
 
-print(ifconfig_result)
+#print(ifconfig_result)
+
+mac_query = re.search(r"\w\w:\w\w:\w\w:\w\w:\w\w:\w\w", ifconfig_result)
+
+if mac_query:
+	print("Successfully changed Mac-Address to: " + mac_query.group(0))
