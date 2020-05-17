@@ -39,6 +39,16 @@ def get_reg_mac(interface):
 		print("[-] Could not read Mac-Address!")
 
 
-curr_mac = get_reg_mac(get_arguments().interface)
+options = get_arguments()
+curr_mac = get_reg_mac(options.interface)
 
-print("Current Mac-Address: " + str(curr_mac))
+print("[+] Current Mac-Address: " + str(curr_mac))
+
+change_mac(options.interface, options.new_mac)
+
+curr_mac = get_reg_mac(options.interface)
+
+if curr_mac == options.new_mac:
+	print("[+] New Mac-Address: " + curr_mac)
+else:
+	print("[-] Error changing Mac-Address!")
