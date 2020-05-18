@@ -42,7 +42,7 @@ def get_reg_mac(interface):
 options = get_arguments()
 curr_mac = get_reg_mac(options.interface)
 
-print("[+] Current Mac-Address: " + str(curr_mac))
+print("[+]   Current Mac-Address: " + str(curr_mac))
 
 change_mac(options.interface, options.new_mac)
 
