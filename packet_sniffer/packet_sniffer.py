@@ -30,4 +30,4 @@ def process_sniffed_packet(packet):
 			print("\n\n[+] Username/Password > " + login_info + "\n\n")
 
 
-sniff("eth0")
+sniff("wlan0")
